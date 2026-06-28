@@ -38,7 +38,12 @@
           </div>
           <div class="input-group-login">
             <label for="passInput">Contraseña</label>
-            <input type="password" id="passInput" placeholder="••••••••" autocomplete="current-password" aria-label="Contraseña">
+            <div style="position:relative;">
+              <input type="password" id="passInput" placeholder="••••••••" autocomplete="current-password" aria-label="Contraseña" style="padding-right:44px;">
+              <button type="button" onclick="const i=document.getElementById('passInput');const b=this.querySelector('i');i.type=i.type==='password'?'text':'password';b.className=i.type==='password'?'fa-solid fa-eye':'fa-solid fa-eye-slash';" style="position:absolute;right:0;top:0;height:100%;width:44px;background:none;border:none;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;" class="btn-toggle-pass" aria-label="Mostrar contraseña">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
           </div>
           <button id="btnEnter" class="btn-login-action">
             <i class="fa-solid fa-right-to-bracket"></i>
