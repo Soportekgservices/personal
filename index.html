@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Home Control — Finanzas del Hogar</title>
+  <meta name="description" content="Control inteligente de servicios públicos y finanzas del hogar">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- ═══════════ PANTALLA DE LOGIN ═══════════ -->
+  <section id="loginView" class="view-section active login-screen">
+    <canvas id="login-particles" aria-hidden="true"></canvas>
+    <div class="wrapper-login">
+      <div class="card-login">
+
+        <div class="login-header">
+          <div class="app-logo">
+            <i class="fa-solid fa-house-laptop"></i>
+          </div>
+          <h1>Home Control <span class="badge-v">v2.0</span></h1>
+          <p>Control de Gastos Domésticos</p>
+        </div>
+
+        <div class="login-body">
+          <div class="input-group-login">
+            <label for="userInput">Usuario</label>
+            <input type="text" id="userInput" placeholder="admin" autocomplete="username" aria-label="Usuario">
+          </div>
+          <div class="input-group-login">
+            <label for="passInput">Contraseña</label>
+            <input type="password" id="passInput" placeholder="••••••••" autocomplete="current-password" aria-label="Contraseña">
+          </div>
+          <button id="btnEnter" class="btn-login-action">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>INGRESAR AL SISTEMA</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>Sistema de control financiero doméstico local.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ APP PRINCIPAL ═══════════ -->
+  <div id="appContainer" class="app-container" style="display:none;">
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar" aria-label="Navegación principal">
+
+      <!-- Brand con badge versión -->
+      <div class="sidebar-brand">
+        <i class="fa-solid fa-house-laptop logo-icon"></i>
+        <h2>Home Control</h2>
+        <span class="badge-v">2.0</span>
+      </div>
+
+      <!-- Menú principal -->
+      <nav class="sidebar-menu" aria-label="Menú principal">
+        <div class="nav-item active" data-view="dashboard" role="button" tabindex="0">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="services" role="button" tabindex="0">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          <span>Servicios</span>
+        </div>
+        <div class="nav-item" data-view="history" role="button" tabindex="0">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Histórico</span>
+        </div>
+        <div class="nav-item" data-view="reports" role="button" tabindex="0">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Reportes</span>
+        </div>
+
+        <!-- ── Separador — Información del Hogar ── -->
+        <div class="nav-separator">
+          <span>Información</span>
+        </div>
+
+        <div class="nav-item" data-view="documents" role="button" tabindex="0">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>Documentos</span>
+        </div>
+        <div class="nav-item" data-view="family" role="button" tabindex="0">
+          <i class="fa-solid fa-people-roof"></i>
+          <span>Familia</span>
+        </div>
+        <div class="nav-item" data-view="housing" role="button" tabindex="0">
+          <i class="fa-solid fa-house"></i>
+          <span>Vivienda</span>
+        </div>
+        <div class="nav-item" data-view="contacts" role="button" tabindex="0">
+          <i class="fa-solid fa-address-book"></i>
+          <span>Contactos</span>
+        </div>
+        <div class="nav-item" data-view="vehicles" role="button" tabindex="0">
+          <i class="fa-solid fa-car"></i>
+          <span>Vehículos</span>
+        </div>
+      </nav>
+
+      <!-- Panel de usuario activo (parte inferior sidebar) -->
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebarUserAvatar">A</div>
+        <div class="sidebar-user-info">
+          <span id="sidebarUserName">Admin</span>
+          <small><i class="fa-solid fa-circle" style="font-size:7px;"></i> Online</small>
+        </div>
+        <button id="btnLogout" class="btn-logout" title="Cerrar Sesión" aria-label="Cerrar sesión">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </aside>
+    <!-- ── FIN SIDEBAR ── -->
+
+    <!-- ── CONTENIDO PRINCIPAL ── -->
+    <main class="main-content">
+
+      <!-- Top Header -->
+      <header class="top-header">
+
+        <!-- Grupo izquierdo: hamburguesa + título -->
+        <div class="header-left-group">
+          <button class="mobile-menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="header-title-text">
+            <h1 id="pageTitle" class="page-title">Resumen Financiero</h1>
+            <p id="pageDesc" class="page-desc">Estado actual de tus servicios y pagos.</p>
+          </div>
+        </div>
+
+        <!-- Grupo derecho: acciones + perfil -->
+        <div class="header-actions">
+
+          <button id="btnSync" class="btn-icon" title="Sincronizar datos" aria-label="Sincronizar">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </button>
+
+          <a href="https://drive.google.com/drive/folders/16dUXtXJUC8M2L6FAPAuibz53e7QwY5uJ"
+              target="_blank" rel="noopener noreferrer" class="btn-icon"
+              title="Carpeta de comprobantes en Drive" aria-label="Abrir carpeta de comprobantes en Drive">
+            <i class="fa-brands fa-google-drive"></i>
+          </a>
+
+          <a href="https://docs.google.com/spreadsheets/d/14JPkOK-1b4guR6Mx7QXX0DZDKk19QpiC2v5jLPE9GHA/edit"
+              target="_blank" rel="noopener noreferrer" class="btn-icon"
+              title="Ver base de datos en Google Sheets" aria-label="Abrir base de datos en Google Sheets">
+            <i class="fa-solid fa-table-cells"></i>
+          </a>
+          <button id="btnThemeToggle" class="btn-icon" title="Cambiar tema" aria-label="Cambiar tema">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+
+          <!-- Indicador de conexión -->
+          <div id="connectionStatus" class="connection-status online" title="Estado de conexión" aria-label="Conectado">
+            <i class="fa-solid fa-wifi"></i>
+          </div>
+
+          <!-- Perfil de usuario -->
+          <div class="user-profile" aria-label="Perfil">
+            <div class="user-info-text">
+              <span id="userName" style="font-weight:700;">Admin</span>
+              <span style="font-size:0.7rem; color:var(--text-muted); display:block;">Control Total</span>
+            </div>
+            <div class="user-avatar" aria-hidden="true">A</div>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- Tablero dinámico inyectado por app.js -->
+      <div id="dynamicBoard" class="content-body bento-grid" role="main" aria-live="polite"></div>
+
+    </main>
+    <!-- ── FIN CONTENIDO PRINCIPAL ── -->
+
+  </div>
+  <!-- FIN APP CONTAINER -->
+
+
+  <!-- ═══════════ MODAL — SERVICIO ═══════════ -->
+  <div id="modalService" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h2 id="modalTitle">Nuevo Servicio</h2>
+        <button class="modal-close" onclick="App.closeModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="serviceForm" class="styled-form">
+        <input type="hidden" id="serviceId">
+        <div class="form-grid-modal">
+
+          <div class="form-control">
+            <label for="srvNombre">Nombre del Servicio <span class="required">*</span></label>
+            <input type="text" id="srvNombre" required placeholder="Ej: Energía Eléctrica" autocomplete="off">
+          </div>
+
+          <div class="form-control">
+            <label for="srvEmpresa">Empresa Proveedora</label>
+            <input type="text" id="srvEmpresa" placeholder="Ej: Enel / EPM" autocomplete="off">
+          </div>
+
+          <div class="form-control">
+            <label for="srvNic">Contrato / NIC</label>
+            <input type="text" id="srvNic" placeholder="Número de cuenta" autocomplete="off">
+          </div>
+
+          <div class="form-control">
+            <label for="srvValor">Valor Mensual Sugerido ($)</label>
+            <input type="number" id="srvValor" step="0.01" placeholder="0.00" min="0">
+          </div>
+
+          <div class="form-control">
+            <label for="srvLinkPago">Link de Pago</label>
+            <input type="url" id="srvLinkPago" placeholder="https://...">
+          </div>
+
+          <div class="form-control">
+            <label for="srvEstado">Estado Inicial</label>
+            <select id="srvEstado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="Pagado">Pagado</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label for="srvDiaGen">Día de Generación (1–31) <span class="required">*</span></label>
+            <input type="number" id="srvDiaGen" min="1" max="31" placeholder="1-31" required>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closeModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Servicio
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════ MODAL — PAGO ═══════════ -->
+  <div id="modalPayment" class="modal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+    <div class="modal-content modal-sm glass">
+      <div class="modal-header">
+        <h2 id="paymentModalTitle">Registrar Factura</h2>
+        <button class="modal-close" onclick="App.closePaymentModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="paymentForm" class="styled-form">
+        <input type="hidden" id="payServiceId">
+
+        <div class="form-control">
+          <label for="payValor">Valor de la Factura <span class="required">*</span></label>
+          <input type="number" id="payValor" required step="0.01" placeholder="0.00" min="0">
+        </div>
+
+        <div class="form-control">
+          <label for="payVencimiento">Fecha de Vencimiento <span class="required">*</span></label>
+          <input type="date" id="payVencimiento" required>
+        </div>
+
+        <div class="form-control">
+          <label for="payDiaGen">Día de Generación (1–31)</label>
+          <input type="number" id="payDiaGen" min="1" max="31" placeholder="1-31" required>
+        </div>
+
+        <div class="form-control checkbox-control">
+          <input type="checkbox" id="payIsPaid">
+          <label for="payIsPaid">¿Ya fue pagada?</label>
+        </div>
+
+        <div id="payDateContainer" class="form-control" style="display:none;">
+          <label for="payFechaPago">Fecha de Pago</label>
+          <input type="date" id="payFechaPago">
+        </div>
+
+        <div class="form-control">
+          <label for="payObservaciones">Observaciones</label>
+          <textarea id="payObservaciones" rows="3" placeholder="Ej: Pago por transferencia bancaria"></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="App.closePaymentModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-receipt"></i> Guardar Factura
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════ LOADING OVERLAY ═══════════ -->
+  <div id="loadingOverlay" class="global-loader" style="display:none;" role="status" aria-label="Cargando">
+    <div class="spinner"></div>
+    <p>Procesando, por favor espera...</p>
+  </div>
+
+  <!-- ═══════════ SYNC SCREEN — Pantalla de sincronización inicial ═══════════ -->
+  <div id="syncScreen" class="sync-screen" style="display:none;" role="status" aria-live="polite" aria-label="Sincronizando datos">
+    <div class="sync-card">
+
+      <!-- Logo -->
+      <div class="sync-logo">
+        <i class="fa-solid fa-house-laptop"></i>
+      </div>
+
+      <!-- Título -->
+      <h2 class="sync-title">Home Control</h2>
+      <p class="sync-subtitle">Centro de Información Familiar</p>
+
+      <!-- Barra de progreso animada -->
+      <div class="sync-progress-track">
+        <div class="sync-progress-bar" id="syncProgressBar"></div>
+      </div>
+
+      <!-- Mensaje de estado dinámico -->
+      <p class="sync-status" id="syncStatusMsg">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        Conectando con la base de datos...
+      </p>
+
+      <!-- Pasos visuales -->
+      <div class="sync-steps">
+        <div class="sync-step" id="syncStep1">
+          <div class="sync-step-dot"></div>
+          <span>Autenticación</span>
+        </div>
+        <div class="sync-step" id="syncStep2">
+          <div class="sync-step-dot"></div>
+          <span>Sincronizando datos</span>
+        </div>
+        <div class="sync-step" id="syncStep3">
+          <div class="sync-step-dot"></div>
+          <span>Listo</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ DRAWER — HISTORIAL POR SERVICIO ═══════════ -->
+  <div id="drawerOverlay" class="drawer-overlay" onclick="App.closeHistoryDrawer()"></div>
+
+  <aside id="historyDrawer" class="history-drawer" aria-label="Historial de pagos">
+    <div class="drawer-header">
+      <div class="drawer-header-info">
+        <h3 id="drawerServiceName">Servicio</h3>
+        <span id="drawerServiceEmpresa" class="drawer-empresa"></span>
+      </div>
+      <button class="btn-action" onclick="App.closeHistoryDrawer()" aria-label="Cerrar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- KPIs rápidos -->
+    <div class="drawer-kpis">
+      <div class="drawer-kpi">
+        <span class="drawer-kpi-label">Pagos registrados</span>
+        <span class="drawer-kpi-value" id="drawerTotalCount">0</span>
+      </div>
+      <div class="drawer-kpi">
+        <span class="drawer-kpi-label">Total acumulado</span>
+        <span class="drawer-kpi-value text-success" id="drawerTotalAmount">$0</span>
+      </div>
+    </div>
+
+    <!-- Línea de tiempo -->
+    <div class="drawer-timeline-wrapper">
+      <h4 class="drawer-section-title">Cronología de pagos</h4>
+      <div id="drawerTimeline" class="drawer-timeline"></div>
+    </div>
+  </aside>
+
+  <!-- Scripts -->
+  <script>
+    window.APP_CONFIG = {
+      API_URL: 'https://script.google.com/macros/s/AKfycbzb7WT-HZpqoVcCebBsPPYO7rvpJg5AGGSbxGbxgO7iJsIdQg3tIOj7U0MYrStXPz5S/exec'
+    };
+  </script>
+  <script src="storage.js"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+  <!-- Módulos de Información del Hogar -->
+  <script src="modules/documents.js"></script>
+  <script src="modules/family.js"></script>
+  <script src="modules/housing.js"></script>
+  <script src="modules/contacts.js"></script>
+  <script src="modules/vehicles.js"></script>
+
+  <!-- Lógica de tema claro/oscuro y botones del header -->
+  <script>
+    // ── Tema claro / oscuro ──────────────────────────────
+    (function() {
+      const saved = localStorage.getItem('hc_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const btnTheme = document.getElementById('btnThemeToggle');
+      const btnSync  = document.getElementById('btnSync');
+      const connStatus = document.getElementById('connectionStatus');
+
+      // Actualizar ícono al cargar
+      function updateThemeIcon() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        btnTheme.querySelector('i').className =
+          theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      }
+      updateThemeIcon();
+
+      // Toggle tema
+      btnTheme.addEventListener('click', function() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('hc_theme', next);
+        updateThemeIcon();
+      });
+
+      // Botón sync: muestra spinner brevemente y dispara syncWithCloud si existe
+      btnSync.addEventListener('click', async function() {
+        const icon = btnSync.querySelector('i');
+        icon.className = 'fa-solid fa-spinner fa-spin';
+        btnSync.disabled = true;
+        try {
+          if (typeof Storage !== 'undefined' && Storage.syncWithCloud) {
+            await Storage.syncWithCloud();
+          }
+          icon.className = 'fa-solid fa-cloud-check';
+          setTimeout(() => { icon.className = 'fa-solid fa-cloud-arrow-up'; }, 2000);
+        } catch(e) {
+          icon.className = 'fa-solid fa-cloud-arrow-up';
+        } finally {
+          btnSync.disabled = false;
+        }
+      });
+
+      // Estado de conexión
+      function updateConnection() {
+        const online = navigator.onLine;
+        connStatus.className = 'connection-status ' + (online ? 'online' : 'offline');
+        connStatus.querySelector('i').className = online ? 'fa-solid fa-wifi' : 'fa-solid fa-wifi-slash';
+        connStatus.title = online ? 'Conectado' : 'Sin conexión';
+      }
+      updateConnection();
+      window.addEventListener('online',  updateConnection);
+      window.addEventListener('offline', updateConnection);
+    });
+  </script>
+
+</body>
+</html>
