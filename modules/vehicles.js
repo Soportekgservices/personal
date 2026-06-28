@@ -16,7 +16,7 @@ const ModuleVehicles = {
         'camioneta':  { icon: 'fa-solid fa-truck-pickup',  gradient: 'linear-gradient(135deg,#10B981,#059669)', glow: 'rgba(16,185,129,0.35)'  },
         'camión':     { icon: 'fa-solid fa-truck',         gradient: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', glow: 'rgba(139,92,246,0.35)'  },
         'camion':     { icon: 'fa-solid fa-truck',         gradient: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', glow: 'rgba(139,92,246,0.35)'  },
-        'default':    { icon: 'fa-solid fa-car',           gradient: 'linear-gradient(135deg,#3B82F6,#1D4ED8)', glow: 'rgba(59,130,246,0.35)'  }
+        'default':    { icon: 'fa-solid fa-motorcycle',   gradient: 'linear-gradient(135deg,#F97316,#C2410C)', glow: 'rgba(249,115,22,0.35)'  }
     },
 
     // ── Punto de entrada ─────────────────────────────────────
@@ -134,10 +134,11 @@ const ModuleVehicles = {
 
         // ── Panel derecho: documentos ──
         const docs = [
-            { icon: 'fa-solid fa-id-card',         label: 'Tarjeta de Propiedad', url: v.urlTarjeta  },
-            { icon: 'fa-solid fa-shield-halved',   label: 'SOAT',                 url: v.urlSoat     },
-            { icon: 'fa-solid fa-screwdriver-wrench', label: 'Tecnomecánica',     url: v.urlTecno    },
-            { icon: 'fa-solid fa-id-badge',        label: 'Licencia de Conducción', url: v.urlLicencia }
+            { icon: 'fa-solid fa-id-card',            label: 'Tarjeta de Propiedad',   url: v.urlTarjeta  },
+            { icon: 'fa-solid fa-shield-halved',      label: 'SOAT',                   url: v.urlSoat     },
+            { icon: 'fa-solid fa-screwdriver-wrench', label: 'Tecnomecánica',           url: v.urlTecno    },
+            { icon: 'fa-solid fa-id-badge',           label: 'Licencia de Conducción',  url: v.urlLicencia },
+            { icon: 'fa-solid fa-file-invoice-dollar',label: 'Factura de Compra',       url: v.urlFactura  }
         ];
 
         let docsHtml = '';
