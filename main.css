@@ -3040,3 +3040,11 @@ code { font-family:var(--font-mono); font-size:0.875em; }
   .cnt-row-actions  { width: 100%; justify-content: flex-end; padding-top: var(--space-2); }
   .cnt-action-btn   { width: 44px; height: 44px; font-size: var(--text-lg); }
 }
+
+/* ── Botón ojo contraseña ── */
+.btn-toggle-pass i { font-size: 1rem; }
+
+@media (max-width: 768px) {
+  .btn-toggle-pass { width: 52px !important; }
+  .btn-toggle-pass i { font-size: 1.35rem; }
+}
