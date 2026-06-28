@@ -106,7 +106,8 @@ const Storage = {
                     urlTarjeta:  v['tarjeta de propiedad (url)'] || v['tarjeta de propiedad'] || v['Tarjeta de Propiedad (URL)'] || '',
                     urlSoat:     v['soat (url)']   || v['soat']  || v['SOAT (URL)'] || v['SOAT'] || '',
                     urlTecno:    v['tecnomecánica (url)'] || v['tecnomecanica (url)'] || v['tecnomecanica'] || v['Tecnomecánica (URL)'] || '',
-                    urlLicencia: v['licencia de conducción (url)'] || v['licencia de conduccion (url)'] || v['licencia de conduccion'] || v['Licencia de Conducción (URL)'] || ''
+                    urlLicencia: v['licencia de conducción (url)'] || v['licencia de conduccion (url)'] || v['licencia de conduccion'] || v['Licencia de Conducción (URL)'] || '',
+                    urlFactura:  v['factura compra (url)'] || v['factura de compra (url)'] || v['Factura Compra (URL)'] || v['Factura de Compra (URL)'] || ''
                 }));
 
                 this.saveAll({
