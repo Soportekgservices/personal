@@ -125,30 +125,39 @@ const ModuleDocuments = {
     // ── Fila de un documento ─────────────────────────────────────────────
     buildDocRow: function (doc) {
         const categoria = this.escapeHtml(doc.categoria || 'Documento');
+        const nombre    = this.escapeHtml(doc.nombre    || '');
         const icon      = this.getCategoryIcon(doc.categoria);
         const hasUrl    = this.isValidUrl(doc.url);
+        const href      = hasUrl ? this.escapeHtml(doc.url) : null;
 
-        const accion = hasUrl
-            ? `<a  href="${this.escapeHtml(doc.url)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn-action doc-link-btn"
-                    title="Abrir ${categoria}">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        const btnLink = hasUrl
+            ? `<a href="${href}" target="_blank" rel="noopener noreferrer"
+                   class="btn-action doc-link-btn" title="Abrir documento" style="flex-shrink:0;">
+                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
                </a>`
-            : `<span class="doc-no-link" title="Sin enlace registrado">
-                    <i class="fa-solid fa-link-slash"></i>
+            : `<span class="doc-no-link" title="Sin enlace" style="flex-shrink:0;">
+                   <i class="fa-solid fa-link-slash"></i>
+               </span>`;
+
+        const nameEl = hasUrl
+            ? `<a href="${href}" target="_blank" rel="noopener noreferrer" class="doc-name-link">
+                   <i class="${icon} doc-row-icon"></i>
+                   <span class="doc-name-text">${categoria}</span>
+               </a>`
+            : `<span class="doc-name">
+                   <i class="${icon} doc-row-icon"></i>
+                   <span class="doc-name-text">${categoria}</span>
                </span>`;
 
         return `
             <tr>
-                <td>
-                    <span class="doc-name">
-                        <i class="${icon} doc-row-icon"></i>
-                        ${categoria}
-                    </span>
+                <td style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding: 10px 16px;">
+                    <div class="doc-row-main" style="flex:1; min-width:0;">
+                        ${nameEl}
+                        <span class="doc-row-categoria">${nombre}</span>
+                    </div>
+                    ${btnLink}
                 </td>
-                <td class="doc-actions-cell">${accion}</td>
             </tr>`;
     },
 
