@@ -2481,13 +2481,19 @@ code { font-family:var(--font-mono); font-size:0.875em; }
   }
 
   /* Fallback por posición cuando no hay data-label */
-  .data-table td:nth-child(1)::before { content: "Servicio"; }
-  .data-table td:nth-child(2)::before { content: "Empresa"; }
-  .data-table td:nth-child(3)::before { content: "Contrato / NIC"; }
-  .data-table td:nth-child(4)::before { content: "Estado"; }
-  .data-table td:nth-child(5)::before { content: "Vencimiento"; }
-  .data-table td:nth-child(6)::before { content: "Valor"; }
-  .data-table td:nth-child(7)::before { content: "Acciones"; }
+  .data-table:not(.doc-table) td:nth-child(1)::before { content: "Servicio"; }
+  .data-table:not(.doc-table) td:nth-child(2)::before { content: "Empresa"; }
+  .data-table:not(.doc-table) td:nth-child(3)::before { content: "Contrato / NIC"; }
+  .data-table:not(.doc-table) td:nth-child(4)::before { content: "Estado"; }
+  .data-table:not(.doc-table) td:nth-child(5)::before { content: "Vencimiento"; }
+  .data-table:not(.doc-table) td:nth-child(6)::before { content: "Valor"; }
+  .data-table:not(.doc-table) td:nth-child(7)::before { content: "Acciones"; }
+
+  /* Tabla de documentos: sin etiquetas automáticas */
+  .doc-table td::before { content: none !important; min-width: 0; }
+  .doc-table td { display: flex !important; padding: 10px 16px !important; border-bottom: 1px solid var(--border-subtle); }
+  .doc-table td:first-child { background: transparent; font-weight: normal; font-size: var(--text-sm); }
+  .doc-table td.doc-actions-cell { padding-top: 0; border-bottom: 1px solid var(--border-subtle); }
 
   /* Primera celda: actúa como título de la tarjeta */
   .data-table td:first-child,
@@ -3047,4 +3053,37 @@ code { font-family:var(--font-mono); font-size:0.875em; }
 @media (max-width: 768px) {
   .btn-toggle-pass { width: 52px !important; }
   .btn-toggle-pass i { font-size: 1.35rem; }
+}
+
+/* ── Documentos: fila con nombre + categoría ── */
+.doc-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.doc-name-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary-400);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: color var(--transition-fast);
+}
+.doc-name-link:hover { color: var(--color-primary-500); text-decoration: underline; }
+
+.doc-name { display: flex; align-items: center; gap: 8px; font-size: var(--text-sm); }
+
+.doc-name-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+
+.doc-row-categoria {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  padding-left: 26px;
+}
+
+@media (max-width: 768px) {
+  .doc-name-text { max-width: 180px; }
 }
